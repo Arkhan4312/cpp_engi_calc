@@ -17,17 +17,8 @@ enum class TokenType
     End
 };
 
-struct Token
-{
+struct Token {
     TokenType type;
     std::string value;
-
-    Token() : type(TokenType::End), value("") {}
-
-    Token(TokenType t, const std::string& v) : type(t), value(v) {}
-
-    std::vector<Token> Tokenize(const std::string& expression);
-    ~Token() = default;
-    std::string removeSpaces(std::string expression);
-    static std::list <std::string> AllExpressions;
+    size_t position;  // Для отслеживания позиции в строке
 };

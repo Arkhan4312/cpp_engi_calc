@@ -1,16 +1,14 @@
+// Calculator.h
 #pragma once
-#include "Token.h"
-#include <stack>
-class Calculator : public Token
-{
-public:
-    Calculator();  // Конструктор по умолчанию
-    ~Calculator() = default;
-    int getPrecedence(char op);
-    double applyOperator(double a, double b, char op);
-    bool areParenthesesBalanced(const std::string& expr);
-    double evaluation(const std::vector<Token>& tokens);
-    void HandleFunctionCall(const std::string& funcName, double r, std::stack<double>& values);
-    bool validateExpression(const std::vector<Token>& tokens, const std::string& expr);
+#include "Parser.h"
+#include "ExpressionHistory.h"
 
+class Calculator {
+    Parser parser;
+    ExpressionHistory history;
+
+    double evaluateImpl(const std::vector<Token>& tokens);
+public:
+    double evaluate(const std::string& expr);
+    const ExpressionHistory& getHistory() const;
 };

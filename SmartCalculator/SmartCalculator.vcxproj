@@ -128,11 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h" />
+    <ClInclude Include="ExpressionHistory.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="ExpressionHistory.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="UI.cpp" />

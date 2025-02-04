@@ -16,8 +16,11 @@ int Calculator::getPrecedence(char op)
 }
 
 // Simple orerators
-double Calculator::applyOperator(double l, double r, char op)
-{
+double Calculator::applyOperator(double l, double r, char op) {
+    constexpr double max_val = 1e300;
+    if ((op == '^' && r > 100) || (l > max_val || r > max_val)) {
+        throw std::runtime_error("Potential overflow detected");
+    }
     switch (op) {
     case '+': return l + r;
     case '-': return l - r;
