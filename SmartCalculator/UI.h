@@ -1,16 +1,17 @@
 #pragma once
 #include <iostream>
-#include <list>
-class UI
-{
-	void ClearConsole();
-	void NewExpression();
-	bool ViewTable();
-	void CreateTXT();
-	bool Settings();
-	int m = 5;
-public:
-	bool Menu();
-	
-};
+#include "ExpressionHistory.h"
 
+class UI {
+    ExpressionHistory history;  // Заменяем ResTable и Token::AllExpressions
+    int precision = 5;
+
+    void ClearConsole();
+    void NewExpression();
+    bool ViewTable();
+    void CreateTXT();
+    bool Settings();
+
+public:
+    bool Menu();
+};

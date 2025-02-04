@@ -1,7 +1,6 @@
 #include "UI.h"
 #include <cstdlib> 
 #include "Calculator.h"
-#include <conio.h>
 #include <sstream>
 #include <iomanip>
 #include "Token.h"
@@ -112,24 +111,23 @@ bool UI::Menu()
     }
 }
     //Main block of calculations
-void UI::NewExpression()
-{
+void UI::NewExpression() {
     std::string expression;
     std::cout << "Enter an expression: ";
 
     while (expression.empty()) {
         std::getline(std::cin, expression);
     }
+
     try {
-        std::vector<Token> tokens = Token().Tokenize(expression);
+        Parser parser;
+        std::vector<Token> tokens = parser.parse(expression);
 
         Calculator calc;
-        if (calc.validateExpression(tokens, expression))
-        {
+        if (calc.validateExpression(tokens, expression)) {
             double result = calc.evaluation(tokens);
-            std::cout << "Result: " << result << std::endl;
-            ResTable.push_front(result);
-
+            std::cout << "Result: " << std::setprecision(precision) << result << std::endl;
+            history.add(expression, result);  // Используем ExpressionHistory
         }
     }
     catch (const std::runtime_error& e) {
@@ -137,31 +135,31 @@ void UI::NewExpression()
     }
 }
 
-
-bool UI::ViewTable()
-{
+bool UI::ViewTable() {
     ClearConsole();
     std::cout << std::setw(5) << "No."
-        << std::setw(20) << "Expression"
-        << std::setw(20) << "Value" << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+        << std::setw(25) << "Expression"
+        << std::setw(20) << "Value" << std::endl
+        << "----------------------------------------------------" << std::endl;
 
+    const auto& expressions = history.getExpressions();
+    const auto& results = history.getResults();
 
     int index = 1;
-    auto resIt = ResTable.begin();          
-    auto exprIt = Token::AllExpressions.begin(); 
+    auto exprIt = expressions.begin();
+    auto resIt = results.begin();
 
-    while (resIt != ResTable.end() && exprIt != Token::AllExpressions.end()) {
-        std::cout << std::setw(5) << index
-            << std::setw(20) << *exprIt    
-            << std::setw(20) << *resIt    
+    while (exprIt != expressions.end() && resIt != results.end()) {
+        std::cout << std::setw(5) << index++
+            << std::setw(25) << *exprIt
+            << std::setw(20) << std::setprecision(precision) << *resIt
             << std::endl;
-        ++index;
-        ++resIt;  
-        ++exprIt;  
+        ++exprIt;
+        ++resIt;
     }
 
     std::cout << " 1.'B'ack to menu. \t2. 'C'lear result \t3. Create .txt 'f'ile" << std::endl;
+
     while (true) {
         if (_kbhit()) {
             char ct = _getch();
@@ -180,9 +178,8 @@ bool UI::ViewTable()
             case 'c':
             case 'C':
             case '2':
-                ResTable.clear();
-                std::cout << " Back to menu. "<< std::endl;
-
+                history.clear();
+                std::cout << "Back to menu." << std::endl;
                 return 0;
 
             case 'f':
@@ -200,40 +197,17 @@ bool UI::ViewTable()
     }
 
 }
-
-void UI::CreateTXT()
-{
-    std::ofstream outFile("output.txt");
-    if (!outFile) {
-        throw std::runtime_error("Error opening the file!");
+void UI::CreateTXT() {
+    try {
+        history.saveToFile("output.txt");
+        std::cout << "File 'output.txt' has been created successfully." << std::endl;
     }
-
-    outFile << std::setw(5) << "No."
-        << std::setw(20) << "Expression"
-        << std::setw(20) << "Value" << std::endl;
-    outFile << "----------------------------------------------------" << std::endl;
-
-    int index = 1;
-    auto resIt = ResTable.begin();
-    auto exprIt = Token::AllExpressions.begin();
-
-    while (resIt != ResTable.end() && exprIt != Token::AllExpressions.end()) {
-        outFile << std::setw(5) << index
-            << std::setw(20) << *exprIt
-            << std::setw(20) << *resIt
-            << std::endl;
-        ++index;
-        ++resIt;
-        ++exprIt;
+    catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
     }
-
-    outFile.close();
-
-    std::cout << "File 'output.txt' has been created and data has been written to it." << std::endl;
 }
 
-bool UI::Settings()
-{
+bool UI::Settings() {
     std::cout << " 1. Set 'P'recision. \t2.'E'xit." << std::endl;
 
     while (true) {
@@ -249,20 +223,18 @@ bool UI::Settings()
             case 'P':
             case 'p':
             case '1':
-
-                std::cout << "Enter new precision: ";
-                std::cin >> this->m;
-                if (std::cin.fail()) {
+                std::cout << "Enter new precision (1-15): ";
+                int new_prec;
+                std::cin >> new_prec;
+                if (std::cin.fail() || new_prec < 1 || new_prec > 15) {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Invalid input. Please enter a valid number.\n";
-                    std::cout << " 1. Set 'P'recision. \t2.'B'ack to menu." << std::endl;
-                    continue; 
+                    std::cout << "Invalid input. Use values between 1 and 15.\n";
                 }
-
-   
-                std::cout << std::fixed << std::setprecision(m);
-                std::cout << "New precision: " << this->m << std::endl;
+                else {
+                    precision = new_prec;
+                    std::cout << "New precision: " << precision << std::endl;
+                }
 
                 std::cout << " 1. Set 'P'recision. \t2.'B'ack to menu." << std::endl;
                 continue;

@@ -1,24 +1,15 @@
 #pragma once
-#include <iostream>
-#include <vector>
+#include <string>
 #include <list>
 
-enum class TokenType
-{
-    Number,
-    Oper,
-    Parenthesis,
-    Function,
-    Argument,
-    Variable,
-    Min,
-    Max,
-    Step,
-    End
+enum class TokenType {
+    Number, Oper, Parenthesis, Function, Variable, End
 };
 
 struct Token {
     TokenType type;
     std::string value;
-    size_t position;  // Для отслеживания позиции в строке
+
+    Token() = default;
+    Token(TokenType t, const std::string& v) : type(t), value(v) {}
 };

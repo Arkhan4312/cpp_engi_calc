@@ -1,14 +1,22 @@
-// Calculator.h
 #pragma once
 #include "Parser.h"
-#include "ExpressionHistory.h"
+#include <stack>
+#include <cmath>
+#include <stdexcept>
+#include <unordered_map>
 
 class Calculator {
-    Parser parser;
-    ExpressionHistory history;
+    std::unordered_map<std::string, double> variables; // Хранилище переменных
+    Parser parser; // Интеграция с парсером
+    
+    int getPrecedence(char op) const;
+    double applyOperator(double a, double b, char op) const;
+    void handleFunction(const std::string& funcName, double arg, std::stack<double>& values) const;
+    void validateExpression(const std::vector<Token>& tokens) const;
 
-    double evaluateImpl(const std::vector<Token>& tokens);
 public:
-    double evaluate(const std::string& expr);
-    const ExpressionHistory& getHistory() const;
+    explicit Calculator() = default;
+    
+    double evaluate(const std::string& expression);
+    void setVariable(const std::string& name, double value);
 };
