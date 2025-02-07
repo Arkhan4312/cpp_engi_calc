@@ -7,6 +7,34 @@
 #include "Token.h"
 #include <fstream>
 
+#ifdef _WIN32
+#include <conio.h>
+#else
+#include <termios.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int _getch() {
+    struct termios oldt, newt;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return ch;
+}
+
+int _kbhit() {
+    struct timeval tv = { 0, 0 };
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    return select(1, &fds, NULL, NULL, &tv);
+}
+#endif
+
 void UI::ClearConsole()
 {
 #ifdef _WIN32
@@ -64,6 +92,7 @@ bool UI::Menu()
             case '5':
                     return 0;
             
+
             case 'h':
             case 'H':
             case '9':

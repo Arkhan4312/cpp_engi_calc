@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <unordered_map>
 
-Calculator::Calculator() : Token(TokenType::End, "") {}
+Calculator::Calculator() {}
 
 // Precedence
 int Calculator::getPrecedence(char op)
@@ -36,7 +36,7 @@ double Calculator::applyOperator(double l, double r, char op)
 
 //Check balace of "(...)"
 bool Calculator::areParenthesesBalanced(const std::string& expr) {
-    std::stack<char> parentheses;
+    std::stack<char> parentheses;   
     for (char ch : expr) {
         if (ch == '(') {
             parentheses.push(ch);
@@ -129,53 +129,9 @@ double Calculator::evaluation(const std::vector<Token>& tokens) {
             operators.push(token.value[0]); 
             break;
         }
-        //case TokenType::Variable: {
-        //    // Переменная "x" с аргументами
-        //    if (token.value == ) {
-        //        // Переходим к следующему токену, который должен быть открывающей скобкой '('
-        //        std::cout << "This is variable";
-        //     
-        //        pos++;  // Переходим к следующему токену, который должен быть первым аргументом
 
-        //        // Считываем три значения (Min, Max, Step)
-        //        double min = 0.0, max = 0.0, step = 0.0;
-        //        bool isMinSet = false, isMaxSet = false, isStepSet = false;
 
-        //        // Чтение Min
-        //        if (tokens[pos].type == TokenType::Min) {
-        //            min = strtod(tokens[pos].value.c_str(), nullptr);  // Используем strtod
-        //            isMinSet = true;
-        //        }
-        //        pos++;  // Переходим к следующему токену (должна быть запятая или закрывающая скобка)
 
-        //        // Чтение Max
-        //        if (tokens[pos].type == TokenType::Max) {
-        //            max = strtod(tokens[pos].value.c_str(), nullptr);  // Используем strtod
-        //            isMaxSet = true;
-        //        }
-        //        pos++;  // Переходим к следующему токену (должна быть запятая или закрывающая скобка)
-
-        //        // Чтение Step
-        //        if (tokens[pos].type == TokenType::Step) {
-        //            step = strtod(tokens[pos].value.c_str(), nullptr);  // Используем strtod
-        //            isStepSet = true;
-        //        }
-        //        pos++;  // Переходим к следующему токену (должна быть закрывающая скобка)
-
-        //       
-        //        // Присваиваем значения Min, Max, Step в соответствующие токены
-        //        if (isMinSet && isMaxSet && isStepSet) {
-        //            // Вычисляем значения от min до max с шагом step
-        //            for (double val = min; val <= max; val += step) {
-        //                values.push(val);  // Добавляем каждое значение в стек
-        //            }
-        //        }
-        //        else {
-        //            throw std::runtime_error("Min, Max, and Step must be all defined.");
-        //        }
-        //    }
-        //    break;
-        //}
             //parenthesis
         case TokenType::Parenthesis:
             if (token.value == "(") {

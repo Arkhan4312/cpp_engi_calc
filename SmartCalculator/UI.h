@@ -8,7 +8,6 @@ class UI
 	void NewExpression();
 	bool ViewTable();
 	void CreateTXT();
-	void PrintResults(const std::string& fileName);
 	bool Settings();
 	int m = 5;
 public:

@@ -1,7 +1,7 @@
 #pragma once
 #include "Token.h"
 #include <stack>
-class Calculator : public Token
+class Calculator
 {
 public:
     Calculator();  // Конструктор по умолчанию

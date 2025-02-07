@@ -132,29 +132,9 @@ std::vector<Token> Token::Tokenize(const std::string& expression)
             tokens.push_back(Token(TokenType::Function, "sqrt"));
             pos += 5;
         }
-        //variable tokenize
-    //    else if (cleanedExpression[pos] == 'x' && cleanedExpression[pos + 1] == '(')
-    //    {
-    //        tokens.push_back(Token(TokenType::Variable, "x"));
-    //        pos += 2;
-    //        while (cleanedExpression[pos] != ')')
-    //        {
-    //            while (isdigit(cleanedExpression[pos]) || cleanedExpression[pos] == '-') {
 
 
-    //            }
-
-    //            
-
-    //           
-    //         
-    //        }
-
-    //        // Переходим после закрывающей скобки
-    //        pos++;
-    //    
-    //}
-
+   
         //error throw
         else {
             throw std::runtime_error("Wrong symbol " + std::string(1, cleanedExpression[pos]));

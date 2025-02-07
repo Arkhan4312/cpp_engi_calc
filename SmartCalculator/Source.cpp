@@ -3,7 +3,6 @@
 #include<iomanip>
 
 int main() {
-    std::setprecision(8);
     UI ui;
     ui.Menu();
    
